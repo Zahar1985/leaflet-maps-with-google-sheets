@@ -69,6 +69,17 @@
       zoomControl: false,
       scrollWheelZoom: false
     }).setView([41.76,-72.69], 11); // default center is overridden by Google Sheet options and points
+    /* Upload Latitude/Longitude markers from data.csv file, show Title in pop-up, and override initial center and zoom to fit all in map */
+  var customLayer = L.geoJson(null, {
+   onEachFeature: function(feature, layer) {
+     layer.bindPopup(feature.properties.Title);
+    }
+   });
+   var runLayer = omnivore.csv('points.csv', null, customLayer)
+   .on('ready', function() {
+    map.fitBounds(runLayer.getBounds());
+   }).addTo(map);
+   controlLayers.addOverlay(customLayer, 'Markers from points.csv');
   </script>
   <script type="text/javascript" src="google-doc-url.js"></script>
   <script type="text/javascript" src="scripts/constants.js"></script>
